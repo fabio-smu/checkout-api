@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CatsModule } from './cats/cats.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import {TypeOrmModule} from '@nestjs/typeorm';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { PedidoInvestimentoModule } from './pedido-investimento/pedido-investimento.module';
+import { PedidoInvestimento } from './pedido-investimento/entities/pedido-investimento.entity';
 
+const mode = process.env.ENV || 'dev'
 @Module({
   imports: [
-    ConfigModule.forRoot({ envFilePath: '.env.development', isGlobal: true }),
+    ConfigModule.forRoot({ envFilePath: `.env.${mode}`, isGlobal: true }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -18,12 +19,11 @@ import { PedidoInvestimentoModule } from './pedido-investimento/pedido-investime
         username: configService.get<string>('DB_USERNAME'),
         password: configService.get<string>('DB_PWD'),
         database: configService.get<string>('DB_NAME'),
-        entities: [],
-        synchronize: false,
+        entities: [PedidoInvestimento],
+        synchronize: true,
       }),
       inject: [ConfigService],
     }),
-    CatsModule,
     PedidoInvestimentoModule,
   ],
   controllers: [AppController],

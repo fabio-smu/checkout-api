@@ -11,7 +11,9 @@ describe('PedidoInvestimentoController', () => {
       providers: [PedidoInvestimentoService],
     }).compile();
 
-    controller = module.get<PedidoInvestimentoController>(PedidoInvestimentoController);
+    controller = module.get<PedidoInvestimentoController>(
+      PedidoInvestimentoController,
+    );
   });
 
   it('should be defined', () => {
